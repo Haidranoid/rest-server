@@ -1,7 +1,7 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const app = express();
-
 
 
 app.get('/users', (req, res) => {
@@ -19,7 +19,7 @@ app.post('/users', (req, res) => {
     const user = new User({
         name: body.name,
         email: body.email,
-        password: body.password,
+        password: bcrypt.hashSync(body.password, 10),
         role: body.role,
     });
 
@@ -32,9 +32,11 @@ app.post('/users', (req, res) => {
             })
         }
 
+        // usuarioDB.password = null;
+
         res.json({
             ok: true,
-            message: 'Done',
+            message: 'Ok',
             response: usuarioDB,
         })
     });
@@ -42,10 +44,25 @@ app.post('/users', (req, res) => {
 
 app.put('/users/:id', (req, res) => {
     const {id} = req.params;
+    const body = req.body;
 
-    res.json({
-        response: `user modified: ${id}`,
+    User.findByIdAndUpdate(id, body, {new: true}, (err, usuarioDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                message: 'Something went wrong',
+                error: err,
+            })
+        }
+
+        res.json({
+            ok: true,
+            message: "Ok",
+            response: usuarioDB,
+        });
     });
+
+
 });
 
 app.delete('/users/:id', (req, res) => {

@@ -7,11 +7,12 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-app.use(require('./routes/users'));
 
 app.get('/', (req, res) => {
     res.json({hello: 'Welcome to Coffee API'})
 });
+app.use(require('./routes/users'));
+
 
 mongoose.connect('mongodb://localhost/coffee', {
     useNewUrlParser: true,
