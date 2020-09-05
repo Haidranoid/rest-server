@@ -1,11 +1,36 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const _ = require('lodash');
 const User = require('../models/user');
 const app = express();
 
 
 app.get('/users', (req, res) => {
-    res.json({response: 'get all users'});
+
+    const from = Number(req.query.from) || 0;
+    const limit = Number(req.query.limit) || 5;
+
+    User.find({}, 'name email role state google img')
+        .skip(from)
+        .limit(limit)
+        .exec((err, users) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    message: 'Something went wrong',
+                    error: err,
+                })
+            }
+
+            User.count({}, (err, documents) => {
+                res.json({
+                    ok: true,
+                    message: 'Ok',
+                    documents,
+                    response: users,
+                })
+            })
+        })
 });
 
 app.get('/users/:id', (req, res) => {
@@ -44,9 +69,13 @@ app.post('/users', (req, res) => {
 
 app.put('/users/:id', (req, res) => {
     const {id} = req.params;
-    const body = req.body;
+    const body = _.pick(req.body, ["name", "email", "img", "role", "state"]);
 
-    User.findByIdAndUpdate(id, body, {new: true}, (err, usuarioDB) => {
+    User.findByIdAndUpdate(id, body, {
+        new: true,
+        runValidators: true,
+        context: 'query',
+    }, (err, usuarioDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -68,9 +97,31 @@ app.put('/users/:id', (req, res) => {
 app.delete('/users/:id', (req, res) => {
     const {id} = req.params;
 
-    res.json({
-        response: `user deleted: ${id}`
+    // remove the register from the DB
+    User.findByIdAndRemove(id, (err, userRemoved) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                message: 'Something went wrong',
+                error: err,
+            })
+        }
+
+        if (!userRemoved) {
+            return res.status(400).json({
+                ok: false,
+                message: 'The user was not found'
+            })
+        }
+
+        res.json({
+            ok: true,
+            message: "Ok",
+            response: userRemoved
+        });
+
     });
+
 });
 
 module.exports = app;
