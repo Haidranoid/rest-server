@@ -10,7 +10,7 @@ app.get('/users', (req, res) => {
     const from = Number(req.query.from) || 0;
     const limit = Number(req.query.limit) || 5;
 
-    User.find({}, 'name email role state google img')
+    User.find({state: true}, 'name email role state google img')
         .skip(from)
         .limit(limit)
         .exec((err, users) => {
@@ -22,7 +22,7 @@ app.get('/users', (req, res) => {
                 })
             }
 
-            User.count({}, (err, documents) => {
+            User.count({state: true}, (err, documents) => {
                 res.json({
                     ok: true,
                     message: 'Ok',
@@ -98,7 +98,9 @@ app.delete('/users/:id', (req, res) => {
     const {id} = req.params;
 
     // remove the register from the DB
-    User.findByIdAndRemove(id, (err, userRemoved) => {
+    //User.findByIdAndRemove(id, (err, userRemoved) => {
+
+    User.findByIdAndUpdate(id, {state: false}, {new: true}, (err, userRemoved) => {
         if (err) {
             return res.status(400).json({
                 ok: false,

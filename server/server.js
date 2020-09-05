@@ -14,15 +14,15 @@ app.get('/', (req, res) => {
 app.use(require('./routes/users'));
 
 
-mongoose.connect('mongodb://localhost/coffee', {
+mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true
-},(err) => {
+}, (err) => {
     if (err) throw err;
 
     app.listen(process.env.PORT, () => {
-        console.log("Listening port => ",3000);
+        console.log("Listening port => ", 3000);
     });
 });
