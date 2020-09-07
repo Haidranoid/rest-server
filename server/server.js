@@ -11,7 +11,8 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => {
     res.json({hello: 'Welcome to Coffee API'})
 });
-app.use(require('./routes/users'));
+
+app.use(require('./routes/index'));
 
 
 mongoose.connect(process.env.CONNECTION_STRING, {
