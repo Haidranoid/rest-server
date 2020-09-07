@@ -33,7 +33,7 @@ app.post('/login', (req, res) => {
 
         const token = jwt.sign(
             {
-                data: usuarioDB
+                user: usuarioDB
             },
             process.env.SECRET_KEY,
             {
