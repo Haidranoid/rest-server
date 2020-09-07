@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const User = require('../models/user');
-const {authenticateToken} = require('../middlewares/authentication');
+const {authenticateToken, authenticateAdminRole} = require('../middlewares/authentication');
 const app = express();
 
 
@@ -33,12 +33,12 @@ app.get('/users', authenticateToken, (req, res) => {
         })
 });
 
-app.get('/users/:id', (req, res) => {
+app.get('/users/:id', authenticateToken, (req, res) => {
     const {id} = req.params;
     res.json({response: `get user: ${id}`});
 });
 
-app.post('/users', (req, res) => {
+app.post('/users', [authenticateToken, authenticateAdminRole], (req, res) => {
     const body = req.body;
 
     const user = new User({
@@ -67,7 +67,7 @@ app.post('/users', (req, res) => {
     });
 });
 
-app.put('/users/:id', (req, res) => {
+app.put('/users/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
     const {id} = req.params;
     const body = _.pick(req.body, ["name", "email", "img", "role", "state"]);
 
@@ -94,7 +94,7 @@ app.put('/users/:id', (req, res) => {
 
 });
 
-app.delete('/users/:id', (req, res) => {
+app.delete('/users/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
     const {id} = req.params;
 
     // remove the register from the DB
