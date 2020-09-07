@@ -21,7 +21,6 @@ app.get('/users', (req, res) => {
                     error: err,
                 })
             }
-
             User.count({state: true}, (err, documents) => {
                 res.json({
                     ok: true,
