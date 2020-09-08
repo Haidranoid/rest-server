@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
-const User = require('../models/user');
+const User = require('../models/User');
 const {authenticateToken, authenticateAdminRole} = require('../middlewares/authentication');
 const app = express();
 
@@ -50,7 +50,7 @@ app.post('/users', [authenticateToken, authenticateAdminRole], (req, res) => {
 
     user.save((err, usuarioDB) => {
         if (err) {
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 message: 'Something went wrong',
                 error: err,
