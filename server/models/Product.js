@@ -11,17 +11,18 @@ const productSchema = new Schema({
         type: Number,
         required: [true, 'The price is required']
     },
-    description: {
-        type: String,
-        required: false
+    category: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true
     },
     available: {
         type: Boolean,
-        required: true, default: true
+        required: true,
+        default: true
     },
-    category: {
-        type: Schema.Types.ObjectId,
-        ref: 'Category', required: true
+    description: {
+        type: String,
     },
     user: {
         type: Schema.Types.ObjectId,
@@ -30,4 +31,4 @@ const productSchema = new Schema({
 });
 
 
-module.exports = mongoose.model('Product', productoSchema);
+module.exports = mongoose.model('Product', productSchema);
