@@ -21,13 +21,13 @@ const productSchema = new Schema({
     },
     category: {
         type: Schema.Types.ObjectId,
-        ref: 'category', required: true
+        ref: 'Category', required: true
     },
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'User'
     }
 });
 
 
-module.exports = mongoose.model('product', productoSchema);
+module.exports = mongoose.model('Product', productoSchema);

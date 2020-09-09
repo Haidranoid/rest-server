@@ -7,7 +7,7 @@ const app = express();
 app.get('/categories', (req, res) => {
     Category.find({})
         .sort('description')
-        .populate('user','name email')
+        .populate('User','name email')
         .exec((err, categoryDB) => {
             if (err) {
                 return res.status(500).json({
@@ -37,6 +37,7 @@ app.get('/categories/:id', (req, res) => {
     const {id} = req.params;
 
     Category.find({_id: id})
+        .populate('User','name email')
         .exec((err, categoryDB) => {
             if (err) {
                 return res.status(500).json({
