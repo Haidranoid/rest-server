@@ -5,7 +5,7 @@ process.env.PORT = process.env.PORT || 3000;
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 // Expires in Token 30 days
-process.env.EXPIRES_IN = 60 * 60 * 24 * 30;
+process.env.EXPIRES_IN = '48h';
 
 // Authentication Seed
 process.env.SECRET_KEY = process.env.HEROKU_SECRET_KEY || 'secret-development';

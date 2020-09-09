@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 // global routes configuration
 app.use(require('./routes/index'));
 
-
+//mongoose.set('runValidators', true);
 mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

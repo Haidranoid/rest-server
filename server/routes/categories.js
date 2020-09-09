@@ -4,12 +4,62 @@ const {authenticateToken, authenticateAdminRole} = require('./../middlewares/aut
 const Category = require('../models/Category');
 const app = express();
 
-app.get('/categories', authenticateToken, (req, res) => {
+app.get('/categories', (req, res) => {
+    Category.find({})
+        .sort('description')
+        .populate('user','name email')
+        .exec((err, categoryDB) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    message: 'Something went wrong',
+                    error: err,
+                })
+            }
 
+            if (!categoryDB) {
+                return res.status(400).json({
+                    ok: false,
+                    message: 'Something went wrong',
+                    error: err,
+                })
+            }
+
+            res.json({
+                ok: true,
+                message: 'ok',
+                response: categoryDB,
+            })
+        })
 });
 
-app.get('/categories/:id', authenticateToken, (req, res) => {
+app.get('/categories/:id', (req, res) => {
     const {id} = req.params;
+
+    Category.find({_id: id})
+        .exec((err, categoryDB) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    message: 'Something went wrong',
+                    error: err,
+                })
+            }
+
+            if (!categoryDB) {
+                return res.status(400).json({
+                    ok: false,
+                    message: 'Something went wrong',
+                    error: err,
+                })
+            }
+
+            res.json({
+                ok: true,
+                message: 'ok',
+                response: categoryDB,
+            })
+        })
 });
 
 app.post('/categories', authenticateToken, (req, res) => {
@@ -39,8 +89,8 @@ app.post('/categories', authenticateToken, (req, res) => {
 
         res.json({
             ok: true,
-            message: 'Ok',
-            category: categoryDB,
+            message: 'created',
+            response: categoryDB,
         })
     })
 
@@ -49,14 +99,6 @@ app.post('/categories', authenticateToken, (req, res) => {
 app.put('/categories/:id', authenticateToken, (req, res) => {
     const {id} = req.params;
     const body = _.pick(req.body, ["description"]);
-
-    // fix the bug when the body is empty
-    if (body === {}) {
-        return res.status(400).json({
-            ok: false,
-            message: 'There is any data',
-        })
-    }
 
     Category.findByIdAndUpdate(id, body, {
         new: true,
@@ -81,8 +123,8 @@ app.put('/categories/:id', authenticateToken, (req, res) => {
 
         res.json({
             ok: true,
-            message: 'Ok',
-            category: categoryDB,
+            message: 'updated',
+            response: categoryDB,
         })
 
     })
@@ -90,6 +132,30 @@ app.put('/categories/:id', authenticateToken, (req, res) => {
 
 app.delete('/categories/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
     const {id} = req.params;
+
+    Category.findByIdAndRemove(id, (err, categoryDB) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                message: 'Something went wrong',
+                error: err,
+            })
+        }
+
+        if (!categoryDB) {
+            return res.status(400).json({
+                ok: false,
+                message: 'Something went wrong',
+                error: err,
+            })
+        }
+
+        res.json({
+            ok: true,
+            message: "deleted",
+            response: categoryDB
+        });
+    })
 });
 
 module.exports = app;
