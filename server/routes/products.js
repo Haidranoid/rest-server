@@ -64,6 +64,38 @@ app.get('/products/:id', authenticateToken, (req, res) => {
         })
 });
 
+app.get('/products/search/:keyword', authenticateToken, (req, res) => {
+    const {keyword} = req.params;
+    const regex = new RegExp(keyword, 'i');
+
+    Product.find({name: regex})
+        .populate('category', 'name')
+        .exec((error, products) => {
+
+            if (error) {
+                return res.status(500).json({
+                    ok: false,
+                    message: 'Something went wrong',
+                    error,
+                })
+            }
+
+            if (!products) {
+                return res.status(400).json({
+                    ok: false,
+                    message: 'Something went wrong',
+                    error,
+                })
+            }
+
+            res.status(200).json({
+                ok: true,
+                message: 'Query executed successfully',
+                response: products
+            })
+        })
+});
+
 app.post('/products', authenticateToken, (req, res) => {
     const body = _.pick(req.body, ["name", "price", "description", "category"]);
     body.user = req.user._id;
