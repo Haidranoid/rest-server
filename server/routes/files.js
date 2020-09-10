@@ -1,14 +1,29 @@
 const express = require('express');
-const {authenticateToken} = require('../middlewares/authentication');
-const {uploadFile} = require('../lib/spaces');
+const {authenticateToken, authenticateAdminRole} = require('../middlewares/authentication');
+const {uploadFile, listFiles} = require('../lib/spaces');
 const app = express();
 
 
-app.get('/files', (req, res) => {
+app.get('/files', [authenticateToken, authenticateAdminRole], (req, res) => {
 
+    listFiles(data => {
+
+        res.status(200).json({
+            ok: true,
+            message: 'File uploaded successfully',
+            data: data['Contents']
+        });
+
+    }, error => {
+        res.status(500).json({
+            ok: false,
+            message: 'Something went wrong',
+            error,
+        });
+    })
 });
 
-app.post('/files', authenticateToken, (req, res) => {
+app.post('/files', [authenticateToken, authenticateAdminRole], (req, res) => {
 
     if (!req.files) {
         return res.status(400).json({

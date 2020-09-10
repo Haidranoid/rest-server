@@ -30,22 +30,22 @@ function uploadFile(file, onSuccess, onError, to = "") {
 }
 
 // List All Files in a Space
-function getAllFiles() {
+function listFiles(onSuccess,onError) {
     const params = {
         Bucket: "rest-server-coffe",
     };
 
     s3.listObjects(params, function (err, data) {
-        if (err) console.log(err, err.stack);
-        else {
-            data['Contents'].forEach(function (obj) {
-                console.log(obj['Key']);
-            })
+        if (err) {
+            onError(err)
+        } else {
+            onSuccess(data)
         }
     });
 }
 
 
 module.exports = {
-    uploadFile
+    uploadFile,
+    listFiles,
 };
