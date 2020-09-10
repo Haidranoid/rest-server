@@ -2,14 +2,15 @@ require('./config/config');
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-const bodyParser = require('body-parser');
+const fileUpload = require('express-fileupload');
 const app = express();
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: false}));
 // parse application/json
-app.use(bodyParser.json());
-
+app.use(express.json());
+// parse the files in form-data
+app.use(fileUpload({}));
 // enables dir public
 app.use(express.static(path.resolve(__dirname, '../public')));
 

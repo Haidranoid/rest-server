@@ -15,3 +15,7 @@ process.env.CONNECTION_STRING = process.env.NODE_ENV !== 'dev' ? process.env.HER
 
 // Google Client ID
 process.env.GOOGLE_CLIENT_ID = process.env.HEROKU_GOOGLE_CLIENT_ID || '87153146962-sjmk25mnuv3o23mes72jnduvpitavgtm.apps.googleusercontent.com';
+
+// DigitalOcean Spaces
+process.env.SPACES_KEY = process.env.HEROKU_SPACES_KEY || 'KS6HOOEB62BKNM2SOEOY';
+process.env.SPACES_SECRET = process.env.HEROKU_SPACES_SECRET || '4Zz7t4rR2QHByZXmx1ck6QKG04nKlhz9vZZ0GbS2qyM';
