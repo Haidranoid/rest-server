@@ -1,6 +1,7 @@
 const express = require('express');
 const {authenticateToken, authenticateAdminRole} = require('../middlewares/authentication');
-const {uploadFile, listFiles} = require('../lib/spaces');
+const {uploadFile, listFiles} = require('../lib/functions/spaces');
+const extensionValidator = require('../lib/utils/extensionValidator');
 const app = express();
 
 
@@ -33,6 +34,15 @@ app.post('/files', [authenticateToken, authenticateAdminRole], (req, res) => {
     }
 
     const {file} = req.files;
+
+    const extInfo = extensionValidator(file.name);
+
+    if (!extInfo.response){
+        return res.status(400).json({
+            ok:false,
+            message:`The extension [${extInfo.extension}] is not valid`
+        })
+    }
 
     uploadFile(file,
         data => {

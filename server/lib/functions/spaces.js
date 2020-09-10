@@ -1,6 +1,4 @@
 const AWS = require('aws-sdk');
-
-
 const spacesEndpoint = new AWS.Endpoint('sfo2.digitaloceanspaces.com');
 const s3 = new AWS.S3({
     endpoint: spacesEndpoint,
@@ -30,7 +28,7 @@ function uploadFile(file, onSuccess, onError, to = "") {
 }
 
 // List All Files in a Space
-function listFiles(onSuccess,onError) {
+function listFiles(onSuccess, onError) {
     const params = {
         Bucket: "rest-server-coffe",
     };
