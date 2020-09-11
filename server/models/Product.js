@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const {DEFAULT_PRODUCT_IMAGE} = require('../lib/constants/constants');
 
 
 const productSchema = new Schema({
@@ -20,6 +21,10 @@ const productSchema = new Schema({
         type: Boolean,
         required: true,
         default: true
+    },
+    img: {
+        type: String,
+        default: DEFAULT_PRODUCT_IMAGE,
     },
     description: {
         type: String,

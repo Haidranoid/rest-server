@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
-const {DEFAULT_USER_IMAGE} = require('../lib/constants/index');
+const {DEFAULT_USER_IMAGE} = require('../lib/constants/constants');
 
 
 let validRoles = {
