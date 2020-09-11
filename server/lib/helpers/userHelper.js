@@ -1,13 +1,11 @@
 const uniqid = require('uniqid');
 const User = require('../../models/User');
-const {DEFAULT_USER_IMAGE} = require('../constants/index');
 const DigitalOcean = require('../../lib/functions/DigitalOcean');
 const extensionValidator = require('../../lib/utils/extensionValidator');
 
-function uploadImage(req, res) {
-    const {folder, id} = req.params;
-    const {image} = req.files;
-    const extInfo = extensionValidator(image.name, ['png', 'jpg', 'gif', 'jpeg']);
+function updateImage(id, req, res) {
+    const {file} = req.files;
+    const extInfo = extensionValidator(file.name, ['png', 'jpg', 'gif', 'jpeg']);
 
     // validating if the user exists
     User.findById(id, (errorFind, user) => {
@@ -19,92 +17,55 @@ function uploadImage(req, res) {
             })
         }
         // changing name of the file avoiding the browser's cache
-        image.name = uniqid(`${id}-`, `.${extInfo.extension}`);
+        file.name = uniqid(`${id}-`, `.${extInfo.extension}`);
 
+        // removes and uploads the user file to digital ocean spaces
+        const urlSplitted = user.img.split('/');
+        const fileName = urlSplitted[urlSplitted.length - 1];
 
-        // removes and uploads the user image to digital ocean spaces
-        if (user.img !== DEFAULT_USER_IMAGE) {
+        DigitalOcean.removeFile('users', fileName, () => {
+                DigitalOcean.uploadFile('users', file, data => {
+                        // uploads the user file in the data base
+                        user.img = `${process.env.SPACES_ENDPOINT}/users/${file.name}`;
+                        user.save((err1, user1) => {
 
-            const urlSplitted = user.img.split('/');
-            const imageName = urlSplitted[urlSplitted.length - 1];
+                            if (err1) {
+                                return res.status(500).json({
+                                    ok: false,
+                                    message: 'Image user change error',
+                                    error: err1
+                                })
+                            }
 
-            DigitalOcean.removeFile(folder, imageName, () => {
-                    DigitalOcean.uploadFile(folder, image, data => {
-                            // uploads the user image in the data base
-                            user.img = `${process.env.SPACES_ENDPOINT}/${folder}/${image.name}`;
-                            user.save((err1, user1) => {
-
-                                if (err1) {
-                                    return res.status(500).json({
-                                        ok: false,
-                                        message: 'Image user change error',
-                                        error: err1
-                                    })
-                                }
-
-                                res.status(201).json({
-                                    ok: true,
-                                    message: 'File uploaded successfully',
-                                    response: {
-                                        user: user1,
-                                        data,
-                                    },
-                                });
-                            })
-
-                        },
-                        errorUpload => {
-                            res.status(500).json({
-                                ok: false,
-                                message: 'Image user upload error',
-                                error: errorUpload,
+                            res.status(201).json({
+                                ok: true,
+                                message: 'File uploaded successfully',
+                                response: {
+                                    user: user1,
+                                    data,
+                                },
                             });
                         })
-                },
-                errorRemove => {
-                    res.status(500).json({
-                        ok: false,
-                        message: 'Image user upload error',
-                        error: errorRemove,
-                    });
-                });
-        } else {
-            DigitalOcean.uploadFile(folder, image, data => {
-                    // uploads the user image in the data base
-                    user.img = `${process.env.SPACES_ENDPOINT}/${folder}/${image.name}`;
-                    user.save((err1, user1) => {
 
-                        if (err1) {
-                            return res.status(500).json({
-                                ok: false,
-                                message: 'Image user change error',
-                                error: err1
-                            })
-                        }
-
-                        res.status(201).json({
-                            ok: true,
-                            message: 'File uploaded successfully',
-                            response: {
-                                user: user1,
-                                data,
-                            },
+                    },
+                    errorUpload => {
+                        res.status(500).json({
+                            ok: false,
+                            message: 'Image user upload error',
+                            error: errorUpload,
                         });
                     })
-
-                },
-                errorUpload => {
-                    res.status(500).json({
-                        ok: false,
-                        message: 'Image user upload error',
-                        error: errorUpload,
-                    });
-                })
-        }
-    });
-
+            },
+            errorRemove => {
+                res.status(500).json({
+                    ok: false,
+                    message: 'Image user upload error',
+                    error: errorRemove,
+                });
+            });
+    })
 }
 
 module.exports = {
-    uploadImage
+    updateImage
 };

@@ -1,15 +1,13 @@
 const express = require('express');
 
-
 const {authenticateToken, authenticateAdminRole} = require('../middlewares/authentication');
+const {verifyFile} = require('../middlewares/files');
 const DigitalOcean = require('../lib/functions/DigitalOcean');
 const userHelper = require('../lib/helpers/userHelper');
-const extensionValidator = require('../lib/utils/extensionValidator');
 const app = express();
 
 
 app.get('/files', [authenticateToken, authenticateAdminRole], (req, res) => {
-
     DigitalOcean.listFiles(data => {
         res.status(200).json({
             ok: true,
@@ -26,37 +24,35 @@ app.get('/files', [authenticateToken, authenticateAdminRole], (req, res) => {
     })
 });
 
-app.post('/files/:folder/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
+app.post('/files/:folder', [authenticateToken, verifyFile], (req, res) => {
+    const {folder} = req.params;
+    const id = req.user._id;
+
+    switch (folder) {
+        case 'users':
+            break;
+
+        case 'products':
+            break;
+    }
+});
+
+app.put('/files/users', [authenticateToken, verifyFile], (req, res) => {
+    const id = req.user._id;
+
+    userHelper.updateImage(id, req, res);
+});
+
+app.delete('/files/users/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
     const {folder, id} = req.params;
 
-    // validating folders allowed
-    const validFolders = ['products', 'users'];
-    if (validFolders.indexOf(folder) < 0) {
-        return res.status(404).json({
-            ok: false,
-            message: 'Route does not found',
-        })
-    }
+    switch (folder) {
+        case 'users':
+            break;
 
-    // validating if the user did not send a image
-    if (!req.files || !req.files.image) {
-        return res.status(400).json({
-            ok: false,
-            message: 'You did not choose any file',
-        })
+        case 'products':
+            break;
     }
-
-    // validating extension file
-    const {image} = req.files;
-    const extInfo = extensionValidator(image.name, ['png', 'jpg', 'gif', 'jpeg']);
-    if (!extInfo.response) {
-        return res.status(400).json({
-            ok: false,
-            message: `The extension [${extInfo.extension}] is not valid`
-        })
-    }
-
-    userHelper.uploadImage(req, res)
 });
 
 module.exports = app;
