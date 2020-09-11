@@ -1,11 +1,9 @@
-function extensionValidator(fileName) {
+function extensionValidator(fileName, array = []) {
     const shortName = fileName.split('.');
     const extension = shortName[shortName.length - 1];
 
-    //allow extensions
-    const extensions = ['png', 'jpg', 'gif', 'jpeg'];
-
-    if (extensions.indexOf(extension) < 0) {
+    //verify allowed extensions
+    if (array.indexOf(extension) < 0) {
         return {
             response: false,
             extension,

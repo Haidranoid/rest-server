@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const {DEFAULT_USER_IMAGE} = require('../lib/constants/index');
 
 
 let validRoles = {
@@ -24,6 +25,7 @@ let userSchema = new Schema({
     },
     img: {
         type: String,
+        default: DEFAULT_USER_IMAGE,
         required: false,
     },
     role: {

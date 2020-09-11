@@ -1,14 +1,16 @@
 const express = require('express');
+
+
 const {authenticateToken, authenticateAdminRole} = require('../middlewares/authentication');
-const {uploadFile, listFiles} = require('../lib/functions/spaces');
+const DigitalOcean = require('../lib/functions/DigitalOcean');
+const userHelper = require('../lib/helpers/userHelper');
 const extensionValidator = require('../lib/utils/extensionValidator');
 const app = express();
 
 
 app.get('/files', [authenticateToken, authenticateAdminRole], (req, res) => {
 
-    listFiles(data => {
-
+    DigitalOcean.listFiles(data => {
         res.status(200).json({
             ok: true,
             message: 'File uploaded successfully',
@@ -24,48 +26,37 @@ app.get('/files', [authenticateToken, authenticateAdminRole], (req, res) => {
     })
 });
 
-app.post('/files', [authenticateToken, authenticateAdminRole], (req, res) => {
+app.post('/files/:folder/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
+    const {folder, id} = req.params;
 
-    if (!req.files) {
+    // validating folders allowed
+    const validFolders = ['products', 'users'];
+    if (validFolders.indexOf(folder) < 0) {
+        return res.status(404).json({
+            ok: false,
+            message: 'Route does not found',
+        })
+    }
+
+    // validating if the user did not send a image
+    if (!req.files || !req.files.image) {
         return res.status(400).json({
             ok: false,
             message: 'You did not choose any file',
         })
     }
 
-    const {file} = req.files;
-
-    const extInfo = extensionValidator(file.name);
-
-    if (!extInfo.response){
+    // validating extension file
+    const {image} = req.files;
+    const extInfo = extensionValidator(image.name, ['png', 'jpg', 'gif', 'jpeg']);
+    if (!extInfo.response) {
         return res.status(400).json({
-            ok:false,
-            message:`The extension [${extInfo.extension}] is not valid`
+            ok: false,
+            message: `The extension [${extInfo.extension}] is not valid`
         })
     }
 
-    uploadFile(file,
-        data => {
-
-            res.status(201).json({
-                ok: true,
-                message: 'File uploaded successfully',
-                response: {
-                    fileName: file.name,
-                    data,
-                },
-            })
-
-        },
-        error => {
-
-            res.status(500).json({
-                ok: false,
-                message: 'Something went wrong',
-                error,
-            });
-
-        });
+    userHelper.uploadImage(req, res)
 });
 
 module.exports = app;
