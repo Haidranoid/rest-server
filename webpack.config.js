@@ -1,9 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-
+const dev = process.env.NODE_ENV === 'dev';
 
 module.exports = {
+    mode: dev ? 'development' : 'production',
     // define entry file and output
     entry: './src/index.js',
     output: {
@@ -24,21 +24,17 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
-            }
+            },
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                loader: 'file-loader',
+            },
         ]
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
             filename: 'index.html',
-        }),
-        new CopyPlugin({
-            patterns: [
-                {
-                    from: (__dirname + '/src/static'),
-                    to: (__dirname + '/public/static')
-                },
-            ],
         }),
     ]
 };

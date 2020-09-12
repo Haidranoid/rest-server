@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import GoogleButton from './components/ui/google-button/GoogleButton';
-import './static/style.css';
+import bear from './static/images/bear.jpg'
+import './static/styles/style.css';
 
 
 const App = () => (
@@ -18,7 +19,8 @@ const App = () => (
             <input type="submit" className="button"/>
         </form>
         <hr/>
-        {console.log(process.env.NODE_ENV)}
+        <img src={bear} alt={"not found"}/>
+        <hr/>
         <h1>Google Sign In</h1>
         <GoogleButton/>
     </>

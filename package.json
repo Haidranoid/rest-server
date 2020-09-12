@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server/server.js",
     "server": "nodemon server/server.js",
-    "page": "cross-env NODE_ENV=development webpack-dev-server --mode development --open",
+    "page": "cross-env NODE_ENV=dev webpack-dev-server --open",
     "build": "webpack --mode production"
   },
   "keywords": [],
@@ -27,7 +27,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-google-login": "^5.1.21",
-    "react-helmet": "^6.1.0",
     "styled-components": "^5.2.0",
     "uniqid": "^5.2.0"
   },
@@ -36,8 +35,8 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "babel-loader": "^8.1.0",
-    "copy-webpack-plugin": "^6.1.0",
     "css-loader": "^4.3.0",
+    "file-loader": "^6.1.0",
     "html-webpack-plugin": "^4.4.1",
     "nodemon": "^2.0.4",
     "style-loader": "^1.2.1",
