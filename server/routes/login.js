@@ -68,7 +68,7 @@ async function verify(token) {
     }
 }
 
-app.post('/google', async (req, res) => {
+app.post('/login/google', async (req, res) => {
 
     const token = req.body.idtoken;
 
