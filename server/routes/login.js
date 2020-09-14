@@ -34,16 +34,11 @@ app.post('/login', (req, res) => {
             })
         }
 
-        const token = jwt.sign(
-            {
-                user: usuarioDB
-            },
-            process.env.SECRET_KEY,
-            {
+        const token = jwt.sign({user: usuarioDB}, process.env.SECRET_KEY, {
                 expiresIn: process.env.EXPIRES_IN
             });
 
-        res.json({
+        return res.status(200).json({
             ok: true,
             message: "Ok",
             user: usuarioDB,
@@ -98,11 +93,7 @@ app.post('/login/google', async (req, res) => {
 
             } else {
 
-                const token = jwt.sign(
-                    {
-                        user: usuarioDB
-                    },
-                    process.env.SECRET_KEY,
+                const token = jwt.sign({user: usuarioDB}, process.env.SECRET_KEY,
                     {
                         expiresIn: process.env.EXPIRES_IN
                     });

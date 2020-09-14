@@ -38,7 +38,7 @@ function updateImage(req, res) {
                                     })
                                 }
 
-                                res.status(201).json({
+                                return res.status(201).json({
                                     ok: true,
                                     message: 'File updated successfully',
                                     response: {
@@ -51,7 +51,7 @@ function updateImage(req, res) {
 
                         },
                         errorUpload => {
-                            res.status(500).json({
+                            return res.status(500).json({
                                 ok: false,
                                 message: 'Image user upload error',
                                 error: errorUpload,
@@ -59,7 +59,7 @@ function updateImage(req, res) {
                         })
                 },
                 errorRemove => {
-                    res.status(500).json({
+                    return res.status(500).json({
                         ok: false,
                         message: 'Image user upload error',
                         error: errorRemove,
@@ -79,7 +79,7 @@ function updateImage(req, res) {
                             })
                         }
 
-                        res.status(201).json({
+                        return res.status(201).json({
                             ok: true,
                             message: 'File updated successfully',
                             response: {
@@ -91,7 +91,7 @@ function updateImage(req, res) {
 
                 },
                 errorUpload => {
-                    res.status(500).json({
+                    return res.status(500).json({
                         ok: false,
                         message: 'Image user upload error',
                         error: errorUpload,

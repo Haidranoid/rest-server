@@ -8,14 +8,14 @@ const app = express();
 
 app.get('/files', [authenticateToken, authenticateAdminRole], (req, res) => {
     DigitalOcean.listFiles(data => {
-        res.status(200).json({
+        return res.status(200).json({
             ok: true,
             message: 'File uploaded successfully',
             data: data['Contents']
         });
 
     }, error => {
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             message: 'Something went wrong',
             error,
@@ -23,9 +23,7 @@ app.get('/files', [authenticateToken, authenticateAdminRole], (req, res) => {
     })
 });
 
-app.post('/files/:folder', [authenticateToken, authenticateAdminRole, verifyFile], (req, res) => {
-
-});
+//app.post('/files/:folder', [authenticateToken, authenticateAdminRole, verifyFile], (req, res) => {});
 
 //app.put('/files/:folder/:id', [authenticateToken, authenticateAdminRole, verifyFile], (req, res) => {
 app.post('/files/:folder/:id', [verifyFile], (req, res) => {
@@ -49,8 +47,6 @@ app.post('/files/:folder/:id', [verifyFile], (req, res) => {
 });
 
 
-app.delete('/files/:folder/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
-
-});
+//app.delete('/files/:folder/:id', [authenticateToken, authenticateAdminRole], (req, res) => {});
 
 module.exports = app;

@@ -23,7 +23,7 @@ app.get('/products', authenticateToken, (req, res) => {
                 })
             }
 
-            res.json({
+            return res.json({
                 ok: true,
                 message: 'Query executed successfully',
                 response: products
@@ -56,7 +56,7 @@ app.get('/products/:id', authenticateToken, (req, res) => {
                 })
             }
 
-            res.status(200).json({
+            return res.status(200).json({
                 ok: true,
                 message: 'Query executed successfully',
                 response: product
@@ -88,7 +88,7 @@ app.get('/products/search/:keyword', authenticateToken, (req, res) => {
                 })
             }
 
-            res.status(200).json({
+            return res.status(200).json({
                 ok: true,
                 message: 'Query executed successfully',
                 response: products
@@ -112,7 +112,7 @@ app.post('/products', authenticateToken, (req, res) => {
             })
         }
 
-        res.status(201).json({
+        return res.status(201).json({
             ok: true,
             message: 'Product created successfully',
             response: product
@@ -160,7 +160,7 @@ app.put('/products/:id', authenticateToken, (req, res) => {
                     })
                 }
 
-                res.status(201).json({
+                return res.status(201).json({
                     ok: true,
                     message: 'Product updated successfully',
                     response: product
@@ -204,7 +204,7 @@ app.delete('/products/:id', authenticateToken, (req, res) => {
                     })
                 }
 
-                res.status(200).json({
+                return res.status(200).json({
                     ok: true,
                     message: 'Product deleted successfully',
                     response: product

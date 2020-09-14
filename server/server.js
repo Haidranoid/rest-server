@@ -5,6 +5,8 @@ const path = require('path');
 const fileUpload = require('express-fileupload');
 const app = express();
 
+// disables the server who uses
+app.disable('x-powered-by');
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: false}));
 // parse application/json

@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-export const onSignIn = googleUser => {
+export const onSignIn = async googleUser => {
     const profile = googleUser.getBasicProfile();
     const id_token = googleUser.getAuthResponse().id_token;
 
-    const response = axios.post('/login/google', {
+    const response = await axios.post(`${process.env.ENDPOINT}/login/google`, {
         id_token,
     }, {
         headers: {

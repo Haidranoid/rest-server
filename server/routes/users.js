@@ -23,7 +23,7 @@ app.get('/users', authenticateToken, (req, res) => {
                 })
             }
             User.count({state: true}, (err, documents) => {
-                res.json({
+                return res.json({
                     ok: true,
                     message: 'Ok',
                     documents,
@@ -35,7 +35,7 @@ app.get('/users', authenticateToken, (req, res) => {
 
 app.get('/users/:id', authenticateToken, (req, res) => {
     const {id} = req.params;
-    res.json({response: `get user: ${id}`});
+    return res.json({response: `get user: ${id}`});
 });
 
 app.post('/users', [authenticateToken, authenticateAdminRole], (req, res) => {
@@ -59,7 +59,7 @@ app.post('/users', [authenticateToken, authenticateAdminRole], (req, res) => {
 
         // usuarioDB.password = null;
 
-        res.json({
+        return res.json({
             ok: true,
             message: 'Ok',
             response: usuarioDB,
@@ -84,7 +84,7 @@ app.put('/users/:id', [authenticateToken, authenticateAdminRole], (req, res) => 
             })
         }
 
-        res.json({
+        return res.json({
             ok: true,
             message: "Ok",
             response: usuarioDB,
@@ -116,7 +116,7 @@ app.delete('/users/:id', [authenticateToken, authenticateAdminRole], (req, res) 
             })
         }
 
-        res.json({
+        return res.json({
             ok: true,
             message: "Ok",
             response: userRemoved

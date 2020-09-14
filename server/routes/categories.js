@@ -25,7 +25,7 @@ app.get('/categories', (req, res) => {
                 })
             }
 
-            res.json({
+            return res.json({
                 ok: true,
                 message: 'ok',
                 response: categoryDB,
@@ -55,7 +55,7 @@ app.get('/categories/:id', (req, res) => {
                 })
             }
 
-            res.json({
+            return res.json({
                 ok: true,
                 message: 'ok',
                 response: categoryDB,
@@ -88,7 +88,7 @@ app.post('/categories', authenticateToken, (req, res) => {
             })
         }
 
-        res.json({
+        return res.json({
             ok: true,
             message: 'created',
             response: categoryDB,
@@ -122,7 +122,7 @@ app.put('/categories/:id', authenticateToken, (req, res) => {
             })
         }
 
-        res.json({
+        return res.json({
             ok: true,
             message: 'updated',
             response: categoryDB,
@@ -151,7 +151,7 @@ app.delete('/categories/:id', [authenticateToken, authenticateAdminRole], (req, 
             })
         }
 
-        res.json({
+        return res.json({
             ok: true,
             message: "deleted",
             response: categoryDB
