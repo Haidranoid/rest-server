@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
 store.subscribe(() => {
-   localStorageService.saveStore(store.getState())
+   localStorageService.saveStore(store)
 });
 
 export default store;
