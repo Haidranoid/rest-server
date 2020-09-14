@@ -64,8 +64,7 @@ async function verify(token) {
 }
 
 app.post('/login/google', async (req, res) => {
-
-    const token = req.body.idtoken;
+    const token = req.body.id_token;
 
     const googleUser = await verify(token).catch(err => {
         return res.status(403).json({

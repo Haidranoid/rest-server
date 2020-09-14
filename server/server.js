@@ -1,10 +1,12 @@
 require('./config/config');
 const express = require('express');
 const mongoose = require('mongoose');
-const path = require('path');
 const fileUpload = require('express-fileupload');
+const cors = require('cors');
+const path = require('path');
 const app = express();
 
+app.use(cors());
 // disables the server who uses
 app.disable('x-powered-by');
 // parse application/x-www-form-urlencoded
@@ -18,7 +20,7 @@ app.use(express.static(path.resolve(__dirname, '../public')));
 
 // index endpoint
 app.get('/', (req, res) => {
-    res.json({hello: 'Welcome to Coffee API'})
+    return res.json({hello: 'Welcome to Coffee API'})
 });
 
 // global routes configuration
