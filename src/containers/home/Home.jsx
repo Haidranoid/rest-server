@@ -1,15 +1,23 @@
 import React, {useState} from "react";
+import {useDispatch} from "react-redux";
 import useRequest from "../../hooks/use-request/useRequest";
+import * as authActions from '../../redux/actions/authAction'
 
 const Home = () => {
+    const dispatch = useDispatch();
     const request = useRequest('/login');
 
-    const [email, setEmail] = useState('haidranoid16@hotmail.com');
-    const [password, setPassword] = useState('123456');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
-        const response = await request.post({email, password});
-        console.log(response)
+        dispatch(authActions.loginStarted());
+        try {
+            const {data} = await request.post({email, password});
+            dispatch(authActions.loginCompleted(data))
+        } catch (e) {
+            dispatch(authActions.loginFailed(e.message))
+        }
     };
 
     return (
@@ -28,9 +36,7 @@ const Home = () => {
             <hr/>
             <hr/>
             <div>
-                <h1>
-                    login
-                </h1>
+                <h1>login</h1>
                 <input type="text" value={email} onChange={e => setEmail(e.target.value)}/>
                 <input type="text" value={password} onChange={e => setPassword(e.target.value)}/>
                 <button onClick={handleLogin}>submit</button>

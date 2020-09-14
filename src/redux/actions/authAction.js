@@ -4,10 +4,6 @@ import {
     LOGIN_FAILED
 }from '../types'
 
-export const login = () => dispatch => {
-
-};
-
 export const loginStarted = () => ({
     type: LOGIN_STARTED
 });
