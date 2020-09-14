@@ -1,3 +1,6 @@
+import 'regenerator-runtime/runtime.js';
+import './config/config'
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import GoogleButton from './components/ui/google-button/GoogleButton';
