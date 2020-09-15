@@ -25,8 +25,8 @@ app.get('/api/files', [authenticateToken, authenticateAdminRole], (req, res) => 
 
 //app.post('/api/files/:folder', [authenticateToken, authenticateAdminRole, verifyFile], (req, res) => {});
 
-//app.put('/api/files/:folder/:id', [authenticateToken, authenticateAdminRole, verifyFile], (req, res) => {
-app.post('/api/files/:folder/:id', [verifyFile], (req, res) => {
+app.put('/api/files/:folder/:id', [authenticateToken, authenticateAdminRole, verifyFile], (req, res) => {
+//app.post('/api/files/:folder/:id', [verifyFile], (req, res) => {
     const {folder} = req.params;
 
     switch (folder) {

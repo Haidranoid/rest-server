@@ -1,8 +1,7 @@
 <CORSConfiguration>
     <CORSRule>
-        <AllowedOrigin>*</AllowedOrigin>
+        <AllowedOrigin>http://localhost:2210</AllowedOrigin>
         <AllowedMethod>GET</AllowedMethod>
         <AllowedHeader>*</AllowedHeader>
-        <MaxAgeSeconds>3000</MaxAgeSeconds>
     </CORSRule>
 </CORSConfiguration>
