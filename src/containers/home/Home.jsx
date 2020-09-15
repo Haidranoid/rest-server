@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {useDispatch} from "react-redux";
 import useRequest from "../../hooks/use-request/useRequest";
 import * as authActions from '../../redux/actions/authAction'
+import {Link} from "react-router-dom";
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -41,6 +42,9 @@ const Home = () => {
                 <input type="text" value={password} onChange={e => setPassword(e.target.value)}/>
                 <button onClick={handleLogin}>submit</button>
             </div>
+            <Link to={"/products"}>
+                ir a productos
+            </Link>
         </div>
     )
 };

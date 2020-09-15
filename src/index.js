@@ -10,5 +10,6 @@ import store from "./redux/store/store";
 
 ReactDOM.render(
     <Provider store={store}>
+        {console.log(process.env.NODE_ENV)}
         <App/>
     </Provider>, document.getElementById('root'));

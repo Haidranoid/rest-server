@@ -12,6 +12,9 @@ const initialState = localStorageService.loadReducer('authReducer', {
 
     loading: null,
     error: null,
+    
+}, state => {
+    localStorage.setItem("token", state.token);
 });
 
 const authReducer = (state = initialState, action) => {

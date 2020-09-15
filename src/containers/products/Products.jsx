@@ -1,16 +1,26 @@
-import React from 'react';
-import {useHistory} from "react-router-dom"
+import React,{useEffect} from 'react';
+import {Link} from "react-router-dom"
 import useRequest from "../../hooks/use-request/useRequest";
 
 const Products = () => {
-    const history = useHistory();
-    const request = useRequest('/products');
+    const request = useRequest('/categories');
+
+    useEffect(() => {
+        fetchData();
+    },[]);
+    const fetchData = async () => {
+        const {data} = await request.get();
+        console.log(data)
+    };
+
     return (
         <div>
             Products
             <br/><hr/>
 
-            <button onClick={() => history.push('/')}>ir a home</button>
+            <Link to={"/"}>
+                ir a home
+            </Link>
         </div>
     );
 };
