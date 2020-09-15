@@ -7,7 +7,7 @@ const {OAuth2Client} = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const app = express();
 
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
 
     const {body} = req;
 
@@ -63,7 +63,7 @@ async function verify(token) {
     }
 }
 
-app.post('/login/google', async (req, res) => {
+app.post('/api/login/google', async (req, res) => {
     const token = req.body.id_token;
 
     const googleUser = await verify(token).catch(err => {

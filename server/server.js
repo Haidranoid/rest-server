@@ -5,6 +5,7 @@ const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const path = require('path');
 const app = express();
+const publicPath = path.resolve(__dirname, '../public');
 
 app.use(cors());
 // disables the server who uses
@@ -18,13 +19,17 @@ app.use(fileUpload({}));
 // enables dir public
 app.use(express.static(path.resolve(__dirname, '../public')));
 
-// index endpoint
-app.get('/', (req, res) => {
-    return res.json({hello: 'Welcome to Coffee API'})
-});
-
 // global routes configuration
 app.use(require('./routes/index'));
+
+// Handles any requests that don't match the ones above
+app.get('*', (req, res) => {
+    return res.sendFile(path.join(publicPath, 'index.html'), err => {
+        if (err) {
+            res.status(500).send(err)
+        }
+    });
+});
 
 //mongoose.set('runValidators', true);
 mongoose.connect(process.env.CONNECTION_STRING, {

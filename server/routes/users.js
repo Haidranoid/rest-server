@@ -6,7 +6,7 @@ const {authenticateToken, authenticateAdminRole} = require('../middlewares/authe
 const app = express();
 
 
-app.get('/users', authenticateToken, (req, res) => {
+app.get('/api/users', authenticateToken, (req, res) => {
 
     const from = Number(req.query.from) || 0;
     const limit = Number(req.query.limit) || 5;
@@ -33,12 +33,12 @@ app.get('/users', authenticateToken, (req, res) => {
         })
 });
 
-app.get('/users/:id', authenticateToken, (req, res) => {
+app.get('/api/users/:id', authenticateToken, (req, res) => {
     const {id} = req.params;
     return res.json({response: `get user: ${id}`});
 });
 
-app.post('/users', [authenticateToken, authenticateAdminRole], (req, res) => {
+app.post('/api/users', [authenticateToken, authenticateAdminRole], (req, res) => {
     const body = req.body;
 
     const user = new User({
@@ -67,7 +67,7 @@ app.post('/users', [authenticateToken, authenticateAdminRole], (req, res) => {
     });
 });
 
-app.put('/users/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
+app.put('/api/users/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
     const {id} = req.params;
     const body = _.pick(req.body, ["name", "email", "img", "role", "state"]);
 
@@ -94,7 +94,7 @@ app.put('/users/:id', [authenticateToken, authenticateAdminRole], (req, res) => 
 
 });
 
-app.delete('/users/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
+app.delete('/api/users/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
     const {id} = req.params;
 
     // remove the register from the DB

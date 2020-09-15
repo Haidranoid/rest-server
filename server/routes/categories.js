@@ -4,7 +4,7 @@ const {authenticateToken, authenticateAdminRole} = require('./../middlewares/aut
 const Category = require('../models/Category');
 const app = express();
 
-app.get('/categories', (req, res) => {
+app.get('/api/categories', (req, res) => {
     Category.find({})
         .sort('description')
         .populate('User', 'name email')
@@ -33,7 +33,7 @@ app.get('/categories', (req, res) => {
         })
 });
 
-app.get('/categories/:id', (req, res) => {
+app.get('/api/categories/:id', (req, res) => {
     const {id} = req.params;
 
     Category.find({_id: id})
@@ -63,7 +63,7 @@ app.get('/categories/:id', (req, res) => {
         })
 });
 
-app.post('/categories', authenticateToken, (req, res) => {
+app.post('/api/categories', authenticateToken, (req, res) => {
     const body = req.body;
 
     const category = new Category({
@@ -97,7 +97,7 @@ app.post('/categories', authenticateToken, (req, res) => {
 
 });
 
-app.put('/categories/:id', authenticateToken, (req, res) => {
+app.put('/api/categories/:id', authenticateToken, (req, res) => {
     const {id} = req.params;
     const body = _.pick(req.body, ["description"]);
 
@@ -131,7 +131,7 @@ app.put('/categories/:id', authenticateToken, (req, res) => {
     })
 });
 
-app.delete('/categories/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
+app.delete('/api/categories/:id', [authenticateToken, authenticateAdminRole], (req, res) => {
     const {id} = req.params;
 
     Category.findByIdAndRemove(id, (err, categoryDB) => {

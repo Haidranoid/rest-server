@@ -4,7 +4,7 @@ const {authenticateToken} = require('./../middlewares/authentication');
 const Product = require('../models/Product');
 const app = express();
 
-app.get('/products', authenticateToken, (req, res) => {
+app.get('/api/products', authenticateToken, (req, res) => {
     const from = req.query.from || 0;
     const limit = req.query.limit || 20;
 
@@ -31,7 +31,7 @@ app.get('/products', authenticateToken, (req, res) => {
         })
 });
 
-app.get('/products/:id', authenticateToken, (req, res) => {
+app.get('/api/products/:id', authenticateToken, (req, res) => {
     const {id} = req.params;
 
     Product.findById(id)
@@ -64,7 +64,7 @@ app.get('/products/:id', authenticateToken, (req, res) => {
         })
 });
 
-app.get('/products/search/:keyword', authenticateToken, (req, res) => {
+app.get('/api/products/search/:keyword', authenticateToken, (req, res) => {
     const {keyword} = req.params;
     const regex = new RegExp(keyword, 'i');
 
@@ -96,7 +96,7 @@ app.get('/products/search/:keyword', authenticateToken, (req, res) => {
         })
 });
 
-app.post('/products', authenticateToken, (req, res) => {
+app.post('/api/products', authenticateToken, (req, res) => {
     const body = _.pick(req.body, ["name", "price", "description", "category"]);
     body.user = req.user._id;
 
@@ -121,7 +121,7 @@ app.post('/products', authenticateToken, (req, res) => {
 
 });
 
-app.put('/products/:id', authenticateToken, (req, res) => {
+app.put('/api/products/:id', authenticateToken, (req, res) => {
     const {id} = req.params;
     const body = _.pick(req.body, ["name", "price", "category", "available", "description"]);
 
@@ -170,7 +170,7 @@ app.put('/products/:id', authenticateToken, (req, res) => {
     );
 });
 
-app.delete('/products/:id', authenticateToken, (req, res) => {
+app.delete('/api/products/:id', authenticateToken, (req, res) => {
     const {id} = req.params;
 
     Product.findById(id, function (error, product) {

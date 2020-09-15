@@ -6,7 +6,7 @@ const productHelper = require('../lib/helpers/productHelper');
 const verifyFile = require('../middlewares/verifyFile');
 const app = express();
 
-app.get('/files', [authenticateToken, authenticateAdminRole], (req, res) => {
+app.get('/api/files', [authenticateToken, authenticateAdminRole], (req, res) => {
     DigitalOcean.listFiles(data => {
         return res.status(200).json({
             ok: true,
@@ -23,10 +23,10 @@ app.get('/files', [authenticateToken, authenticateAdminRole], (req, res) => {
     })
 });
 
-//app.post('/files/:folder', [authenticateToken, authenticateAdminRole, verifyFile], (req, res) => {});
+//app.post('/api/files/:folder', [authenticateToken, authenticateAdminRole, verifyFile], (req, res) => {});
 
-//app.put('/files/:folder/:id', [authenticateToken, authenticateAdminRole, verifyFile], (req, res) => {
-app.post('/files/:folder/:id', [verifyFile], (req, res) => {
+//app.put('/api/files/:folder/:id', [authenticateToken, authenticateAdminRole, verifyFile], (req, res) => {
+app.post('/api/files/:folder/:id', [verifyFile], (req, res) => {
     const {folder} = req.params;
 
     switch (folder) {
@@ -47,6 +47,6 @@ app.post('/files/:folder/:id', [verifyFile], (req, res) => {
 });
 
 
-//app.delete('/files/:folder/:id', [authenticateToken, authenticateAdminRole], (req, res) => {});
+//app.delete('/api/files/:folder/:id', [authenticateToken, authenticateAdminRole], (req, res) => {});
 
 module.exports = app;
