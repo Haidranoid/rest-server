@@ -1,15 +1,11 @@
 import store from "../../redux/store/store";
 
-export const loadReducer = (reducerName, defaultState, callback = () => {}) => {
+export const loadReducer = (reducerName, defaultState, callback = (state) => state) => {
     const serializedStore = localStorage.getItem('store');
     const store = JSON.parse(serializedStore);
 
-    if (store) {
-        callback(store[reducerName]);
-        return store[reducerName];
-    } else {
-        return defaultState
-    }
+    if (store) return callback(store[reducerName]);
+    else return defaultState
 };
 
 export const saveStore = store => {
