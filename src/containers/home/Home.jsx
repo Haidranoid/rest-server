@@ -23,6 +23,7 @@ const Home = () => {
 
     return (
         <div>
+            {console.log(process.env.NODE_ENV)}
             <h1>DigitalOcean Spaces Tutorial</h1>
             <p>Please select a file and submit the form to test an asset to your DigitalOcean Space.</p>
 
