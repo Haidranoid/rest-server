@@ -19,8 +19,9 @@ axios.interceptors.request.use(async config => {
 axios.interceptors.response.use(response => response, async error => {
     const originalRequest = error.config;
 
-    console.log(originalRequest.url);
-    if (error.response.status === 401 && originalRequest.url === process.env.URL_API) {
+    console.log("originalRequest: " + originalRequest.url);
+    console.log("URL_API: " + process.env.URL_API);
+    if (error.response.status === 401 && originalRequest.url === '/api/login') {
         //history.push('https://facebook.com');
         return Promise.reject(error);
     }

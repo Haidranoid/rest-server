@@ -1,9 +1,9 @@
-import React,{useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {Link} from "react-router-dom"
 import useRequest from "../../hooks/use-request/useRequest";
 
 const Products = () => {
-    const request = useRequest('/categories');
+    const request = useRequest('/products');
 
     useEffect(() => {
         fetchData();

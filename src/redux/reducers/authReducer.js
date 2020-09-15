@@ -12,7 +12,7 @@ const initialState = localStorageService.loadReducer('authReducer', {
 
     loading: null,
     error: null,
-    
+
 }, state => {
     localStorage.setItem("token", state.token);
 });
@@ -28,6 +28,7 @@ const authReducer = (state = initialState, action) => {
             };
 
         case LOGIN_COMPLETED:
+            localStorage.setItem("token", action.payload.token);
             return {
                 ...state,
                 user: action.payload.user,
