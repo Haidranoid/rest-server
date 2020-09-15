@@ -3,12 +3,12 @@ import {Link} from "react-router-dom"
 import useRequest from "../../hooks/use-request/useRequest";
 
 const Products = () => {
-    const [products,setProducts] = useState([]);
+    const [products, setProducts] = useState([]);
     const request = useRequest('/products');
 
     useEffect(() => {
         fetchData();
-    },[]);
+    }, []);
     const fetchData = async () => {
         const {data} = await request.get();
         setProducts(data.response);
@@ -17,7 +17,8 @@ const Products = () => {
     return (
         <div>
             Products
-            <br/><hr/>
+            <br/>
+            <hr/>
             {products.length !== 0 && products.map(product => <div key={product._id}>
                 <hr/>
                 <p>{product.description}</p>
