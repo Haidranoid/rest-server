@@ -11,6 +11,7 @@ const Products = () => {
     }, []);
     const fetchData = async () => {
         const {data} = await request.get();
+        console.log(data);
         setProducts(data.response);
     };
 

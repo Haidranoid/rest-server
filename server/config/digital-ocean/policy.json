@@ -1,0 +1,36 @@
+{
+  "Statement": [
+    {
+      "Sid": "Allow Service",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "s3:*",
+      "Resource": "arn:aws:s3:::rest-server-coffe/*",
+      "Condition": {
+        "StringLike": {
+          "aws:Referer": [
+            "http://localhost:2210/*"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "Deny Service",
+      "Effect": "Deny",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "s3:*",
+      "Resource": "arn:aws:s3:::rest-server-coffe/*",
+      "Condition": {
+        "StringNotLike": {
+          "aws:Referer": [
+            "http://localhost:2210/*"
+          ]
+        }
+      }
+    }
+  ]
+}

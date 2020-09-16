@@ -15,8 +15,8 @@ function uploadFile(folder, file, onSuccess, onError) {
         ContentType: file.mimetype,
         ContentLength: file.size,
         ContentEncoding: file.encoding,
-        //ACL: "private"
-        ACL: "public-read"
+        ACL: "private",
+        //ACL: "public-read"
     };
 
     s3.putObject(params, function (err, data) {
