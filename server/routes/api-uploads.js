@@ -28,6 +28,8 @@ app.get('/api/uploads/:folder/:id', authenticateToken, (req, res) => {
                 return res.status(200).sendFile(pathImage);
 
             });
+            break;
+
         case 'products':
             Product.findById(id, (errorFind, product) => {
                 if (errorFind || !product) {

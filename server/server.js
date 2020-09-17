@@ -2,6 +2,7 @@ require('./config/process/config');
 const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const rateLimit = require("express-rate-limit");
 const path = require('path');
@@ -18,9 +19,13 @@ const limiter = rateLimit({
         ok: false,
         message: "Too many request from this IP, please try again later"
     },
-    header: false,
+    headers: false,
 });
 app.use(limiter);
+// enables cors
+app.use(cors({
+    origin: 'http://localhost:2210'
+}));
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: false}));
 // parse application/json

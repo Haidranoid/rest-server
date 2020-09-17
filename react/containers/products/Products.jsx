@@ -23,6 +23,7 @@ const Products = () => {
             {products.length !== 0 && products.map(product => <div key={product._id}>
                 <hr/>
                 <p>{product.description}</p>
+                {console.log(product.img)}
                 <img src={product.img} alt={"Image not found"}/>
                 <hr/>
             </div>)}
