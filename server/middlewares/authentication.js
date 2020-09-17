@@ -8,7 +8,7 @@ function authenticateToken(req, res, next) {
     if (token == null) return res.status(401).json({ok:false,message:"There is any token"});
 
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
-        if (err) return res.status(403).json({ok:false,message:"Token is not valid"});
+        if (err) return res.status(401).json({ok:false,message:"Token is not valid"});
 
         req.user = decoded.user;
         next();

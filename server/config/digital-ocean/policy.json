@@ -11,7 +11,8 @@
       "Condition": {
         "StringLike": {
           "aws:Referer": [
-            "http://localhost:2210/*"
+            "http://localhost:2210/*",
+            "https://rest-server-coffe.herokuapp.com/*"
           ]
         }
       }
@@ -27,7 +28,8 @@
       "Condition": {
         "StringNotLike": {
           "aws:Referer": [
-            "http://localhost:2210/*"
+            "http://localhost:2210/*",
+            "https://rest-server-coffe.herokuapp.com/*"
           ]
         }
       }

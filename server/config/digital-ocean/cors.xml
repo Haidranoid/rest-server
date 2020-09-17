@@ -1,7 +1,12 @@
 <CORSConfiguration>
     <CORSRule>
-        <AllowedOrigin>http://localhost:2210</AllowedOrigin>
-        <AllowedMethod>GET</AllowedMethod>
+        <AllowedOrigin>http://localhost:2210/*</AllowedOrigin>
+        <AllowedMethod>*</AllowedMethod>
+        <AllowedHeader>*</AllowedHeader>
+    </CORSRule>
+    <CORSRule>
+        <AllowedOrigin>https://rest-server-coffe.herokuapp.com/*</AllowedOrigin>
+        <AllowedMethod>*</AllowedMethod>
         <AllowedHeader>*</AllowedHeader>
     </CORSRule>
 </CORSConfiguration>

@@ -5,7 +5,7 @@ const dev = process.env.NODE_ENV === 'development';
 module.exports = {
     mode: dev ? 'development' : 'production',
     // define entry file and output
-    entry: './src/index.js',
+    entry: './react/index.js',
     output: {
         path: path.resolve('public'),
         filename: 'bundle.js',
@@ -14,7 +14,7 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx']
     },
-    // define babel loader
+    // define loaders
     module: {
         rules: [
             {
@@ -34,7 +34,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/index.html',
+            template: './react/index.html',
             filename: 'index.html',
         }),
     ],

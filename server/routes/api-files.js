@@ -46,7 +46,6 @@ app.put('/api/files/:folder/:id', [authenticateToken, authenticateAdminRole, ver
     }
 });
 
-
 //app.delete('/api/files/:folder/:id', [authenticateToken, authenticateAdminRole], (req, res) => {});
 
 module.exports = app;

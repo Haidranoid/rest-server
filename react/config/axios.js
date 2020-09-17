@@ -18,27 +18,29 @@ axios.interceptors.request.use(async config => {
 // Response interceptor for API calls
 axios.interceptors.response.use(response => response, async error => {
     const originalRequest = error.config;
+    console.log(1)
 
-    console.log("originalRequest: " + originalRequest.url);
-    console.log("URL_API: " + process.env.URL_API);
-    if (error.response.status === 401 && originalRequest.url === '/process/login') {
-        //history.push('https://facebook.com');
+    if (error.response.status === 401 && originalRequest.url === '/api/login') {
+        console.log(2)
         return Promise.reject(error);
     }
 
     if (error.response.status === 401 && !originalRequest._retry) {
+        console.log(3)
         originalRequest._retry = true;
 
         const refreshToken = localStorage.getItem('refreshToken');
         const response = await axios.post('/login', {"refreshToken": refreshToken});
 
-        if (response.status === 201 || response.status === 200) {
+        if (response.status === 200) {
+            console.log(4)
             localStorage.setItem("token", response.data);
             localStorage.setItem("refreshToken", response.data);
             axios.defaults.headers['Authorization'] = 'Bearer ' + localStorage.getItem('token');
             return axios(originalRequest);
         }
     }
+    console.log(5)
     return Promise.reject(error);
 });
 
