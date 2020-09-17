@@ -1,17 +1,22 @@
 const express = require('express');
 const uniqid = require('uniqid');
-const verifyFile = require('../middlewares/verifyFile');
+const path = require('path');
+const fs = require('fs');
+const User = require('../models/User');
+const Product = require('../models/Product');
+const {verifyFile} = require('../middlewares/security');
+const {DEFAULT_USER_IMAGE,DEFAULT_PRODUCT_IMAGE} = require("../lib/constants/constants");
 const app = express();
 
 app.put('/api/uploads/:folder/:id', verifyFile, (req, res) => {
     const {folder} = req.params;
 
+    const {id} = req.params;
+    const {file} = req.files;
+    const extInfo = req.extInfo;
+
     switch (folder) {
         case 'users':
-            const {id} = req.params;
-            const {file} = req.files;
-            const extInfo = req.extInfo;
-
             User.findById(id, (errorFind, user) => {
                 if (errorFind || !user) {
                     return res.status(404).json({
@@ -23,26 +28,177 @@ app.put('/api/uploads/:folder/:id', verifyFile, (req, res) => {
 
                 file.name = uniqid(`${id}-`, `.${extInfo.extension}`);
 
-                file.mv(`uploads/users/${file.name}`, err => {
+                if (user.img && user.img !== DEFAULT_USER_IMAGE) {
+                    const pathImage = path.resolve(user.img);
+                    const removed = user.img;
 
-                    if (err) {
-                        return res.status(500).json({
+                    if (fs.existsSync(pathImage)) {
+                        fs.unlinkSync(pathImage)
+                    } else {
+                        return res.status(404).json({
                             ok: false,
-                            message: "Something went wrong",
-                            error: err,
+                            message: "This file does not exists in the server",
+                            error: {
+                                file: user.img,
+                            },
                         })
                     }
 
-                    return res.status(201).json({
-                        ok: true,
-                        message: "File uploaded!",
-                    })
-                });
-            });
+                    user.img = `uploads/users/${file.name}`;
+                    user.save((err, userDB) => {
+                        if (err) {
+                            return res.status(500).json({
+                                ok: false,
+                                message: "Something went wrong",
+                                error: err,
+                            })
+                        }
 
+                        file.mv(`uploads/users/${file.name}`, err => {
+                            if (err) {
+                                return res.status(500).json({
+                                    ok: false,
+                                    message: "Something went wrong",
+                                    error: err,
+                                })
+                            }
+
+                            return res.status(201).json({
+                                ok: true,
+                                message: "File uploaded!",
+                                response: {
+                                    user: userDB,
+                                    removed,
+                                }
+                            })
+                        })
+                    })
+
+                } else {
+                    user.img = `uploads/users/${file.name}`;
+                    user.save((err, userDB) => {
+                        if (err) {
+                            return res.status(500).json({
+                                ok: false,
+                                message: "Something went wrong",
+                                error: err,
+                            })
+                        }
+
+                        file.mv(`uploads/users/${file.name}`, err => {
+                            if (err) {
+                                return res.status(500).json({
+                                    ok: false,
+                                    message: "Something went wrong",
+                                    error: err,
+                                })
+                            }
+
+                            return res.status(201).json({
+                                ok: true,
+                                message: "File uploaded!",
+                                response: {
+                                    user: userDB,
+
+                                }
+                            })
+                        })
+                    })
+                }
+            });
             break;
 
         case 'products':
+
+            Product.findById(id, (errorFind, product) => {
+                if (errorFind || !product) {
+                    return res.status(404).json({
+                        ok: false,
+                        message: 'The product does not exits',
+                        error: errorFind
+                    })
+                }
+
+                file.name = uniqid(`${id}-`, `.${extInfo.extension}`);
+
+                if (product.img && product.img !== DEFAULT_PRODUCT_IMAGE) {
+                    const pathImage = path.resolve(product.img);
+                    const removed = product.img;
+
+                    if (fs.existsSync(pathImage)) {
+                        fs.unlinkSync(pathImage)
+                    } else {
+                        return res.status(404).json({
+                            ok: false,
+                            message: "This file does not exists in the server",
+                            error: {
+                                file: product.img,
+                            },
+                        })
+                    }
+
+                    product.img = `uploads/products/${file.name}`;
+                    product.save((err, productDB) => {
+                        if (err) {
+                            return res.status(500).json({
+                                ok: false,
+                                message: "Something went wrong",
+                                error: err,
+                            })
+                        }
+
+                        file.mv(`uploads/products/${file.name}`, err => {
+                            if (err) {
+                                return res.status(500).json({
+                                    ok: false,
+                                    message: "Something went wrong",
+                                    error: err,
+                                })
+                            }
+
+                            return res.status(201).json({
+                                ok: true,
+                                message: "File uploaded!",
+                                response: {
+                                    product: productDB,
+                                    removed,
+                                }
+                            })
+                        })
+                    })
+
+                } else {
+                    product.img = `uploads/products/${file.name}`;
+                    product.save((err, productDB) => {
+                        if (err) {
+                            return res.status(500).json({
+                                ok: false,
+                                message: "Something went wrong",
+                                error: err,
+                            })
+                        }
+
+                        file.mv(`uploads/products/${file.name}`, err => {
+                            if (err) {
+                                return res.status(500).json({
+                                    ok: false,
+                                    message: "Something went wrong",
+                                    error: err,
+                                })
+                            }
+
+                            return res.status(201).json({
+                                ok: true,
+                                message: "File uploaded!",
+                                response: {
+                                    product: productDB,
+
+                                }
+                            })
+                        })
+                    })
+                }
+            });
             break;
 
         default:

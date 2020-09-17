@@ -28,7 +28,7 @@ function updateImage(req, res) {
                     DigitalOcean.uploadFile('users', file, data => {
                             // uploads the user file in the data base
                             user.img = `${process.env.SPACES_ENDPOINT}/users/${file.name}`;
-                            user.save((errorDB, user) => {
+                            user.save((errorDB, userDB) => {
 
                                 if (errorDB) {
                                     return res.status(500).json({
@@ -42,7 +42,7 @@ function updateImage(req, res) {
                                     ok: true,
                                     message: 'File updated successfully',
                                     response: {
-                                        user,
+                                        user: userDB,
                                         data,
                                         removed: fileName
                                     },
@@ -69,7 +69,7 @@ function updateImage(req, res) {
             DigitalOcean.uploadFile('users', file, data => {
                     // uploads the user file in the data base
                     user.img = `${process.env.SPACES_ENDPOINT}/users/${file.name}`;
-                    user.save((errorDB, user) => {
+                    user.save((errorDB, userDB) => {
 
                         if (errorDB) {
                             return res.status(500).json({
@@ -83,7 +83,7 @@ function updateImage(req, res) {
                             ok: true,
                             message: 'File updated successfully',
                             response: {
-                                user,
+                                user: userDB,
                                 data,
                             },
                         });

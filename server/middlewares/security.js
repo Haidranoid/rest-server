@@ -21,5 +21,6 @@ function verifyFile(req, res, next) {
     next()
 }
 
-
-module.exports = verifyFile;
+module.exports = {
+    verifyFile,
+};

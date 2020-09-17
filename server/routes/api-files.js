@@ -3,7 +3,7 @@ const DigitalOcean = require('../lib/functions/DigitalOcean');
 const {authenticateToken, authenticateAdminRole} = require('../middlewares/authentication');
 const userHelper = require('../lib/helpers/userHelper');
 const productHelper = require('../lib/helpers/productHelper');
-const verifyFile = require('../middlewares/verifyFile');
+const {verifyFile} = require('../middlewares/security');
 const app = express();
 
 app.get('/api/files', [authenticateToken, authenticateAdminRole], (req, res) => {

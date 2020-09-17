@@ -1,15 +1,32 @@
 require('./config/process/config');
 const express = require('express');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
+const rateLimit = require("express-rate-limit");
 const cors = require('cors');
 const path = require('path');
 const app = express();
 const publicPath = path.resolve(__dirname, '../public');
 
-app.use(cors());
-// disables the server who uses
-app.disable('x-powered-by');
+
+// apply some security steps
+app.use(helmet());
+// avoid DDos attack
+const limiter = rateLimit({
+    windowMs: 20 * 60 * 1000, // 20 minutes
+    max: 200, // limit each IP to 100 requests per windowMs
+    message: {
+        ok: false,
+        message: "Too many request from this IP, please try again later"
+    },
+    header: false,
+});
+app.use(limiter);
+// enables cors
+app.use(cors({
+    origin: 'http://localhost:2210'
+}));
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: false}));
 // parse application/json
@@ -40,6 +57,7 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 }, (err) => {
     if (err) throw err;
 
+    // run the server in the port 3000
     app.listen(process.env.PORT, () => {
         console.log("Listening port => ", 3000);
     });
