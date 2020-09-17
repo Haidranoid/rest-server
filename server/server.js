@@ -4,11 +4,9 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
 const rateLimit = require("express-rate-limit");
-const cors = require('cors');
 const path = require('path');
 const app = express();
 const publicPath = path.resolve(__dirname, '../public');
-
 
 // apply some security steps
 app.use(helmet());
@@ -23,10 +21,6 @@ const limiter = rateLimit({
     header: false,
 });
 app.use(limiter);
-// enables cors
-app.use(cors({
-    origin: 'http://localhost:2210'
-}));
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: false}));
 // parse application/json

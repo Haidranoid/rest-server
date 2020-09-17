@@ -5,13 +5,57 @@ const fs = require('fs');
 const User = require('../models/User');
 const Product = require('../models/Product');
 const {verifyFile} = require('../middlewares/security');
-const {DEFAULT_USER_IMAGE,DEFAULT_PRODUCT_IMAGE} = require("../lib/constants/constants");
+const {authenticateToken} = require('../middlewares/authentication');
+const {DEFAULT_USER_IMAGE, DEFAULT_PRODUCT_IMAGE} = require("../lib/constants/constants");
 const app = express();
 
-app.put('/api/uploads/:folder/:id', verifyFile, (req, res) => {
-    const {folder} = req.params;
+app.get('/api/uploads/:folder/:id', authenticateToken, (req, res) => {
+    const {folder, id} = req.params;
 
-    const {id} = req.params;
+
+    switch (folder) {
+        case 'users':
+            User.findById(id, (errorFind, user) => {
+                if (errorFind || !user) {
+                    return res.status(404).json({
+                        ok: false,
+                        message: 'The user does not exits',
+                        error: errorFind
+                    })
+                }
+
+                const pathImage = path.resolve(user.img);
+                return res.status(200).sendFile(pathImage);
+
+            });
+        case 'products':
+            Product.findById(id, (errorFind, product) => {
+                if (errorFind || !product) {
+                    return res.status(404).json({
+                        ok: false,
+                        message: 'The product does not exits',
+                        error: errorFind
+                    })
+                }
+
+                const pathImage = path.resolve(product.img);
+                return res.status(200).sendFile(pathImage);
+
+            });
+            break;
+
+        default:
+            res.status(404).json({
+                ok: false,
+                message: 'Route is not valid',
+            })
+
+    }
+});
+
+app.put('/api/uploads/:folder/:id', verifyFile, (req, res) => {
+    const {folder, id} = req.params;
+
     const {file} = req.files;
     const extInfo = req.extInfo;
 
@@ -109,7 +153,6 @@ app.put('/api/uploads/:folder/:id', verifyFile, (req, res) => {
             break;
 
         case 'products':
-
             Product.findById(id, (errorFind, product) => {
                 if (errorFind || !product) {
                     return res.status(404).json({
